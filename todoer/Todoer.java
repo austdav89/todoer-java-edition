@@ -32,6 +32,7 @@ class Todoer {
         ArrayList<Todo> todos = new ArrayList<Todo>(); 
         String prompt = "TODO>"; ////Universal prompt prefix
         String[] userInput;
+        int todoNum;
         
         while (true){
             userInput = new String[2];
@@ -51,15 +52,52 @@ class Todoer {
                     }
                     break;
                 case "show":
-                    if (todos.size() > 0){
+                    if (!(todos.isEmpty())){
                         System.out.println("Todo#\tDone\tName");
                         System.out.println("--------------------------------");
                     }
                     for (int i = 0; i < todos.size(); i++){
                         System.out.println((i + 1) + "\t" + todos.get(i).done + "\t" + todos.get(i).name);
                     }
+                    break;
+                case "del":
+                    try {
+                        todoNum = Integer.parseInt(userInput[1]);
+                        if (todoNum == 1 && todos.size() == 1){
+                            todos.clear();
+                        }
+                        else if (todoNum > 0 && todoNum <= todos.size()){
+                            todos.remove(todoNum - 1);
+                        }
+                        else if (todos.isEmpty()){
+                            System.out.println("No todos to delete");
+                        }
+                        else {
+                            System.out.println("-del error: number out of scope");
+                        }  
+                    }
+                    catch (NumberFormatException e)
+                        {
+                           System.out.println("-del error: not a number");
+                        }
+                    break;
                 case "done":
-                    
+                    try {
+                        todoNum = Integer.parseInt(userInput[1]);
+                        if (todoNum > 0 && todoNum <= todos.size()){
+                            todos.get(todoNum - 1).done = true;
+                        }
+                        else if (todos.isEmpty()){
+                            System.out.println("No todos to complete");
+                        }
+                        else {
+                            System.out.println("-done error: number out of scope");
+                        }  
+                    }
+                    catch (NumberFormatException e)
+                        {
+                           System.out.println("-done error: not a number");
+                        }
                     break;
                 default:
                     if (!(userInput[0].isBlank())) //if user input is NOT blank throw error
